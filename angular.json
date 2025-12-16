@@ -32,9 +32,14 @@
               }
             ],
             "styles": [
+               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -60,17 +65,20 @@
           },
           "defaultConfiguration": "production"
         },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "gestion-vehiculos-front:build:production"
+          "serve": {
+            "builder": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+              "production": {
+                "buildTarget": "gestion-vehiculos-front:build:production"
+              },
+              "development": {
+                "buildTarget": "gestion-vehiculos-front:build:development"
+              }
             },
-            "development": {
-              "buildTarget": "gestion-vehiculos-front:build:development"
+            "defaultConfiguration": "development",
+            "options": {
+              "proxyConfig": "proxy.conf.json"
             }
-          },
-          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

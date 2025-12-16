@@ -1,1 +1,341 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "ngx-toastr/toastr";
+
+
+:root {
+  // Colores principales
+  --primary-color: #667eea;
+  --primary-dark: #764ba2;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  
+  --bg-light: #f8f9fa;
+  --bg-dark: #343a40;
+  --bg-white: #ffffff;
+  
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-muted: #9e9e9e;
+  
+  --border-color: #dee2e6;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --box-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+  
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--bg-light);
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+}
+
+.card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-lg);
+  }
+}
+
+.card-header {
+  background-color: var(--bg-white);
+  border-bottom: 2px solid var(--primary-color);
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+}
+
+.btn {
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  border: none;
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+  }
+}
+
+.table {
+  background-color: var(--bg-white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  
+  thead {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    
+    th {
+      border: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      padding: 1rem;
+    }
+  }
+  
+  tbody {
+    tr {
+      transition: background-color var(--transition-fast);
+      
+      &:hover {
+        background-color: rgba(102, 126, 234, 0.05);
+      }
+      
+      td {
+        padding: 1rem;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.form-control, .form-select {
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  transition: all var(--transition-fast);
+  
+  &:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.badge-disponible {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge-renting {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge-reservado {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-vendido {
+  background-color: #6c757d;
+  color: white;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  
+  i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  h5 {
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    margin-bottom: 1.5rem;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  
+  .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+.page-header {
+  background-color: var(--bg-white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1.5rem;
+  
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    
+    i {
+      color: var(--primary-color);
+      margin-right: 0.5rem;
+    }
+  }
+  
+  .breadcrumb {
+    margin: 0.5rem 0 0 0;
+    background: none;
+    padding: 0;
+  }
+}
+
+.filters-container {
+  background-color: var(--bg-white);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1.5rem;
+}
+
+.modal-content {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: white;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  
+  .btn-close {
+    filter: brightness(0) invert(1);
+  }
+}
+
+[data-bs-toggle="tooltip"] {
+  cursor: help;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+  
+  &:hover {
+    background: var(--primary-dark);
+  }
+}
+
+/* ============================================
+   CLASE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+.toast-container .ngx-toastr {
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.toast-success {
+  background-color: var(--success-color);
+}
+
+.toast-error {
+  background-color: var(--danger-color);
+}
+
+.toast-info {
+  background-color: var(--info-color);
+}
+
+.toast-warning {
+  background-color: var(--warning-color);
+}

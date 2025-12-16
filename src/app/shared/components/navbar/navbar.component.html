@@ -1,0 +1,82 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/home">
+      <i class="bi bi-car-front-fill me-2"></i>
+      Gestión de Vehículos
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menú -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">
+            <i class="bi bi-house-door"></i> Inicio
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/vehiculos" routerLinkActive="active">
+            <i class="bi bi-car-front"></i> Vehículos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/clientes" routerLinkActive="active">
+            <i class="bi bi-people"></i> Clientes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/contratos" routerLinkActive="active">
+            <i class="bi bi-file-text"></i> Contratos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/facturas" routerLinkActive="active">
+            <i class="bi bi-receipt"></i> Facturas
+          </a>
+        </li>
+      </ul>
+
+      <!-- Usuario -->
+      <ul class="navbar-nav" *ngIf="currentUser">
+        <li class="nav-item dropdown">
+          
+            <a class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle"></i>
+            {{ currentUser.nombre }} {{ currentUser.apellidos }}
+            <span class="badge bg-light text-dark ms-2">{{ currentUser.rol }}</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="bi bi-person"></i> Mi Perfil
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="bi bi-gear"></i> Configuración
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item text-danger" (click)="logout()" style="cursor: pointer;">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
