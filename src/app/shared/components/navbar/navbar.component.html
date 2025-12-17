@@ -1,10 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary">
+<nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
+    <!-- Logo y Título -->
     <a class="navbar-brand" routerLink="/home">
-      <i class="bi bi-car-front-fill me-2"></i>
-      Gestión de Vehículos
+      <i class="bi bi-car-front-fill"></i>
+      <span>Gestión de Vehículos</span>
     </a>
 
+    <!-- Toggle para móvil -->
     <button
       class="navbar-toggler"
       type="button"
@@ -18,28 +20,33 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active">
-            <i class="bi bi-house-door"></i> Inicio
+          <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-house-door-fill"></i>
+            <span>Inicio</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/vehiculos" routerLinkActive="active">
-            <i class="bi bi-car-front"></i> Vehículos
+            <i class="bi bi-car-front-fill"></i>
+            <span>Vehículos</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/clientes" routerLinkActive="active">
-            <i class="bi bi-people"></i> Clientes
+            <i class="bi bi-people-fill"></i>
+            <span>Clientes</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/contratos" routerLinkActive="active">
-            <i class="bi bi-file-text"></i> Contratos
+            <i class="bi bi-file-text-fill"></i>
+            <span>Contratos</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/facturas" routerLinkActive="active">
-            <i class="bi bi-receipt"></i> Facturas
+            <i class="bi bi-receipt"></i>
+            <span>Facturas</span>
           </a>
         </li>
       </ul>
@@ -48,30 +55,38 @@
       <ul class="navbar-nav" *ngIf="currentUser">
         <li class="nav-item dropdown">
           
-            <a class="nav-link dropdown-toggle"
+            <a class="nav-link dropdown-toggle user-menu"
             href="#"
             id="navbarDropdown"
             role="button"
-            data-bs-toggle="dropdown">
-            <i class="bi bi-person-circle"></i>
-            {{ currentUser.nombre }} {{ currentUser.apellidos }}
-            <span class="badge bg-light text-dark ms-2">{{ currentUser.rol }}</span>
+            data-bs-toggle="dropdown"
+          >
+            <div class="user-avatar">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="user-info d-none d-lg-block">
+              <span class="user-name">{{ currentUser.nombre }} {{ currentUser.apellidos }}</span>
+              <small class="user-rol">{{ currentUser.rol }}</small>
+            </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
               <a class="dropdown-item" href="#">
-                <i class="bi bi-person"></i> Mi Perfil
+                <i class="bi bi-person"></i>
+                <span>Mi Perfil</span>
               </a>
             </li>
             <li>
               <a class="dropdown-item" href="#">
-                <i class="bi bi-gear"></i> Configuración
+                <i class="bi bi-gear"></i>
+                <span>Configuración</span>
               </a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
-              <a class="dropdown-item text-danger" (click)="logout()" style="cursor: pointer;">
-                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+              <a class="dropdown-item logout" (click)="logout()" style="cursor: pointer;">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Cerrar Sesión</span>
               </a>
             </li>
           </ul>

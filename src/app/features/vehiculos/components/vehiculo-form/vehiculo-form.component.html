@@ -1,0 +1,187 @@
+<div class="modal-backdrop" (click)="cerrar.emit()"></div>
+
+<div class="modal-container">
+  <div class="modal-content-custom">
+    <!-- Header -->
+    <div class="modal-header-custom">
+      <h3>
+        <i class="bi" [ngClass]="esEdicion ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+        {{ esEdicion ? 'Editar Vehículo' : 'Nuevo Vehículo' }}
+      </h3>
+      <button class="btn-close-custom" (click)="cerrar.emit()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body-custom">
+      <form [formGroup]="vehiculoForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <!-- Matrícula -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-hash"></i>
+              Matrícula *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="matricula"
+              placeholder="1234ABC"
+              [class.is-invalid]="isFieldInvalid('matricula')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('matricula')">
+              La matrícula es obligatoria (máx. 20 caracteres)
+            </div>
+          </div>
+
+          <!-- Año Fabricación -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-calendar"></i>
+              Año de Fabricación *
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="anyoFabricacion"
+              placeholder="2024"
+              [class.is-invalid]="isFieldInvalid('anyoFabricacion')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('anyoFabricacion')">
+              Año entre 1900 y 2100
+            </div>
+          </div>
+
+          <!-- Marca -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-bookmark"></i>
+              Marca *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="marca"
+              placeholder="Toyota"
+              [class.is-invalid]="isFieldInvalid('marca')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('marca')">
+              La marca es obligatoria (máx. 100 caracteres)
+            </div>
+          </div>
+
+          <!-- Modelo -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-car-front"></i>
+              Modelo *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="modelo"
+              placeholder="Corolla"
+              [class.is-invalid]="isFieldInvalid('modelo')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('modelo')">
+              El modelo es obligatorio (máx. 100 caracteres)
+            </div>
+          </div>
+
+          <!-- Color -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-palette"></i>
+              Color
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="color"
+              placeholder="Blanco"
+            />
+          </div>
+
+          <!-- Kilómetros -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-speedometer2"></i>
+              Kilómetros *
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="kilometros"
+              placeholder="50000"
+              [class.is-invalid]="isFieldInvalid('kilometros')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('kilometros')">
+              Los kilómetros son obligatorios (mínimo 0)
+            </div>
+          </div>
+
+          <!-- Número de Bastidor -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-upc"></i>
+              Número de Bastidor *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="numeroBastidor"
+              placeholder="VF1RFD00123456789"
+              [class.is-invalid]="isFieldInvalid('numeroBastidor')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('numeroBastidor')">
+              El número de bastidor es obligatorio (máx. 50 caracteres)
+            </div>
+          </div>
+
+          <!-- Tipo de Combustible -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-fuel-pump"></i>
+              Tipo de Combustible *
+            </label>
+            <select
+              class="form-select"
+              formControlName="tipoCombustible"
+              [class.is-invalid]="isFieldInvalid('tipoCombustible')"
+            >
+              <option value="">Selecciona un tipo...</option>
+              <option value="GASOLINA">Gasolina</option>
+              <option value="DIESEL">Diésel</option>
+              <option value="ELECTRICO">Eléctrico</option>
+              <option value="HIBRIDO">Híbrido</option>
+              <option value="GLP">GLP</option>
+              <option value="GNC">GNC</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('tipoCombustible')">
+              El tipo de combustible es obligatorio
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer-custom">
+          <button type="button" class="btn btn-secondary" (click)="cerrar.emit()">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="!loading">
+              <i class="bi" [ngClass]="esEdicion ? 'bi-check-circle' : 'bi-plus-circle'"></i>
+              {{ esEdicion ? 'Guardar Cambios' : 'Crear Vehículo' }}
+            </span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Guardando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,158 @@
+<div class="vehiculos-container">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1>
+          <i class="bi bi-car-front-fill"></i>
+          Gestión de Vehículos
+        </h1>
+        <p class="page-subtitle">Administra tu flota de vehículos</p>
+      </div>
+      <button class="btn btn-primary" (click)="abrirModalCrear()">
+        <i class="bi bi-plus-circle"></i>
+        Nuevo Vehículo
+      </button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters-container">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar por matrícula, marca o modelo..."
+              [(ngModel)]="filtroTexto"
+              (input)="aplicarFiltros()"
+            />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="filtroSituacion" (change)="aplicarFiltros()">
+            <option value="">Todas las situaciones</option>
+            <option value="DISPONIBLE">Disponible</option>
+            <option value="EN_RENTING">En Renting</option>
+            <option value="RESERVADO">Reservado</option>
+            <option value="VENDIDO">Vendido</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="filtroCombustible" (change)="aplicarFiltros()">
+            <option value="">Todos los combustibles</option>
+            <option value="GASOLINA">Gasolina</option>
+            <option value="DIESEL">Diésel</option>
+            <option value="ELECTRICO">Eléctrico</option>
+            <option value="HIBRIDO">Híbrido</option>
+            <option value="GLP">GLP</option>
+            <option value="GNC">GNC</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-primary w-100" (click)="limpiarFiltros()">
+            <i class="bi bi-x-circle"></i>
+            Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <!-- Tabla de Vehículos -->
+    <div *ngIf="!loading && vehiculosFiltrados.length > 0" class="table-container fade-in">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Matrícula</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Año</th>
+            <th>Combustible</th>
+            <th>Kilómetros</th>
+            <th>Situación</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vehiculo of vehiculosFiltrados">
+            <td>
+              <strong class="text-primary">{{ vehiculo.matricula }}</strong>
+            </td>
+            <td>{{ vehiculo.marca }}</td>
+            <td>{{ vehiculo.modelo }}</td>
+            <td>{{ vehiculo.anyoFabricacion }}</td>
+            <td>
+              <span class="badge-combustible" [class]="'badge-' + vehiculo.tipoCombustible.toLowerCase()">
+                {{ vehiculo.tipoCombustible }}
+              </span>
+            </td>
+            <td>{{ vehiculo.kilometros | number }} km</td>
+            <td>
+              <span class="badge" [ngClass]="obtenerClaseSituacion(vehiculo.situacionNombre)">
+                {{ vehiculo.situacionNombre }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons justify-content-end">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="verDetalle(vehiculo)"
+                  title="Ver detalle"
+                >
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-warning"
+                  (click)="abrirModalEditar(vehiculo)"
+                  title="Editar"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="confirmarEliminar(vehiculo)"
+                  title="Eliminar"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && vehiculosFiltrados.length === 0" class="empty-state">
+      <i class="bi bi-car-front"></i>
+      <h5>No hay vehículos</h5>
+      <p *ngIf="filtroTexto || filtroSituacion || filtroCombustible">
+        No se encontraron vehículos con los filtros aplicados
+      </p>
+      <p *ngIf="!filtroTexto && !filtroSituacion && !filtroCombustible">
+        Comienza agregando tu primer vehículo
+      </p>
+      <button class="btn btn-primary" (click)="abrirModalCrear()">
+        <i class="bi bi-plus-circle"></i>
+        Agregar Vehículo
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar (lo crearemos después) -->
+ <app-vehiculo-form
+  *ngIf="mostrarModal"
+  [vehiculo]="vehiculoSeleccionado"
+  [esEdicion]="esEdicion"
+  (cerrar)="cerrarModal()"
+  (guardado)="onVehiculoGuardado()"
+></app-vehiculo-form> 
