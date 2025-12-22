@@ -1,0 +1,152 @@
+<div class="modal-backdrop" (click)="cerrar.emit()"></div>
+
+<div class="modal-container">
+  <div class="modal-content-custom">
+    <!-- Header -->
+    <div class="modal-header-custom">
+      <h3>
+        <i class="bi" [ngClass]="esEdicion ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+        {{ esEdicion ? 'Editar Cliente' : 'Nuevo Cliente' }}
+      </h3>
+      <button class="btn-close-custom" (click)="cerrar.emit()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body-custom">
+      <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <!-- Tipo de Cliente -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-person-badge"></i>
+              Tipo de Cliente *
+            </label>
+            <select
+              class="form-select"
+              formControlName="tipoCliente"
+              [class.is-invalid]="isFieldInvalid('tipoCliente')"
+            >
+              <option value="">Selecciona un tipo...</option>
+              <option value="PARTICULAR">Particular</option>
+              <option value="EMPRESA">Empresa</option>
+              <option value="AUTONOMO">Autónomo</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('tipoCliente')">
+              El tipo de cliente es obligatorio
+            </div>
+          </div>
+
+          <!-- DNI/CIF -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-card-text"></i>
+              DNI/CIF *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="dni"
+              placeholder="12345678A / B12345678"
+              [class.is-invalid]="isFieldInvalid('dni')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('dni')">
+              El DNI/CIF es obligatorio (máx. 20 caracteres)
+            </div>
+          </div>
+
+          <!-- Nombre -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-person"></i>
+              Nombre *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="nombre"
+              placeholder="Juan Pérez / Empresa S.L."
+              [class.is-invalid]="isFieldInvalid('nombre')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('nombre')">
+              El nombre es obligatorio (máx. 200 caracteres)
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-envelope"></i>
+              Email *
+            </label>
+            <input
+              type="email"
+              class="form-control"
+              formControlName="email"
+              placeholder="cliente@ejemplo.com"
+              [class.is-invalid]="isFieldInvalid('email')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('email')">
+              Email inválido o vacío (máx. 100 caracteres)
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-telephone"></i>
+              Teléfono *
+            </label>
+            <input
+              type="tel"
+              class="form-control"
+              formControlName="telefono"
+              placeholder="666123456"
+              [class.is-invalid]="isFieldInvalid('telefono')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('telefono')">
+              El teléfono es obligatorio (máx. 20 caracteres)
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-geo-alt"></i>
+              Dirección *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="direccion"
+              placeholder="Calle Example, 123, 28001 Madrid"
+              [class.is-invalid]="isFieldInvalid('direccion')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('direccion')">
+              La dirección es obligatoria (máx. 500 caracteres)
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer-custom">
+          <button type="button" class="btn btn-secondary" (click)="cerrar.emit()">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="!loading">
+              <i class="bi" [ngClass]="esEdicion ? 'bi-check-circle' : 'bi-plus-circle'"></i>
+              {{ esEdicion ? 'Guardar Cambios' : 'Crear Cliente' }}
+            </span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Guardando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

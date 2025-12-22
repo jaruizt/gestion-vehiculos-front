@@ -1,21 +1,14 @@
 export interface ClienteResponse {
   id: number;
-  tipoCliente: TipoCliente;
-  documento: string;
+  tipoCliente: string;
+  dni: string;
   nombre: string;
-  apellidos?: string;
-  razonSocial?: string;
-  nombreCompleto: string;
+  email: string;
+  telefono: string;
   direccion: string;
-  ciudad?: string;
-  provincia?: string;
-  codigoPostal?: string;
-  telefono?: string;
-  email?: string;
-  observaciones?: string;
-  fechaCreacion: string;
-  fechaActualizacion: string;
   activo: boolean;
+  fechaCreacion?: string;
+  fechaActualizacion?: string;
 }
 
 export interface ClienteRequest {

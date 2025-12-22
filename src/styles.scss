@@ -436,3 +436,19 @@ html, body {
   background-color: var(--warning-color);
   color: var(--bg-darkest);
 }
+
+// tipo de cliente
+.badge-particular {
+  background-color: rgba(103, 58, 183, 0.15);
+  color: #673ab7;
+}
+
+.badge-empresa {
+  background-color: rgba(33, 150, 243, 0.15);
+  color: #2196f3;
+}
+
+.badge-autonomo {
+  background-color: rgba(255, 152, 0, 0.15);
+  color: #ff9800;
+}
