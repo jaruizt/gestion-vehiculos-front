@@ -13,10 +13,6 @@
   h1 {
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    
-    i {
-      font-size: 1.75rem;
-    }
   }
   
   .page-subtitle {
@@ -26,83 +22,14 @@
   }
 }
 
-.welcome-card {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  background: linear-gradient(135deg, #2450a7 0%, var(--bg-hover) 100%);
-  border: 1px solid var(--border-color);
-  border-left: 4px solid var(--primary-color);
-  border-radius: var(--border-radius);
-  padding: 1rem 1.5rem;
-  box-shadow: var(--box-shadow-lg);
-  z-index: 1000;
-  max-width: 300px;
-  
-  .welcome-content {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  
-  .welcome-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--gradient-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    
-    i {
-      font-size: 1.25rem;
-      color: white;
-    }
-  }
-  
-  .welcome-text {
-    h3 {
-      margin: 0 0 0.25rem 0;
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    
-    p {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      
-      strong {
-        color: var(--text-primary);
-        font-weight: 600;
-        display: block;
-        margin-bottom: 0.25rem;
-      }
-    }
-    
-    .user-badge {
-      display: inline-block;
-      background: var(--gradient-primary);
-      color: white;
-      padding: 0.15rem 0.5rem;
-      border-radius: 12px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-  }
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
+// Stats Cards
 .stat-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -112,12 +39,12 @@
   align-items: center;
   gap: 1.5rem;
   transition: all 0.3s ease;
-  cursor: pointer;
+  height: 100%;
   
   &:hover {
     transform: translateY(-4px);
-    box-shadow: var(--box-shadow-lg);
     border-color: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(77, 163, 255, 0.15);
   }
   
   .stat-icon {
@@ -127,60 +54,272 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.75rem;
     flex-shrink: 0;
-    
-    i {
-      font-size: 1.75rem;
-    }
     
     &.blue {
       background: rgba(77, 163, 255, 0.15);
-      i {
-        color: #4da3ff;
-      }
-    }
-    
-    &.green {
-      background: rgba(0, 230, 118, 0.15);
-      i {
-        color: #00e676;
-      }
-    }
-    
-    &.yellow {
-      background: rgba(255, 215, 64, 0.15);
-      i {
-        color: #ffd740;
-      }
-    }
-    
-    &.purple {
-      background: rgba(171, 71, 188, 0.15);
-      i {
-        color: #ab47bc;
-      }
+      color: var(--primary-color);
     }
   }
   
   .stat-content {
     flex: 1;
     
-    h3 {
+    .stat-value {
       font-size: 2rem;
       font-weight: 700;
-      margin: 0 0 0.25rem 0;
       color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 0.5rem;
     }
     
-    p {
-      margin: 0;
-      color: var(--text-secondary);
+    .stat-label {
       font-size: 0.9rem;
+      color: var(--text-secondary);
       font-weight: 500;
     }
   }
 }
 
+// Chart Cards
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  height: 100%;
+  
+  .chart-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    
+    h5 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      
+      i {
+        color: var(--primary-color);
+        margin-right: 0.5rem;
+      }
+    }
+  }
+  
+  .chart-body {
+    padding: 1.5rem;
+  }
+  
+  .chart-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .chart-item {
+    display: grid;
+    grid-template-columns: auto 60px 1fr;
+    gap: 1rem;
+    align-items: center;
+    
+    .chart-item-label {
+      .badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        min-width: 120px;
+        text-align: center;
+      }
+    }
+    
+    .chart-item-value {
+      text-align: right;
+      
+      strong {
+        font-size: 1.1rem;
+        color: var(--text-primary);
+      }
+    }
+    
+    .chart-item-bar {
+      background: var(--bg-hover);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      
+      .chart-bar-fill {
+        height: 100%;
+        transition: width 0.6s ease;
+        border-radius: 4px;
+        
+        &.badge-disponible {
+          background: var(--success-color);
+        }
+        
+        &.badge-renting {
+          background: var(--info-color);
+        }
+        
+        &.badge-reservado {
+          background: var(--warning-color);
+        }
+        
+        &.badge-vendido {
+          background: var(--text-muted);
+        }
+      }
+    }
+  }
+  
+  .empty-chart {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    
+    i {
+      font-size: 3rem;
+      opacity: 0.5;
+      display: block;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+// Quick Actions
+.quick-actions-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  
+  h5 {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    
+    i {
+      color: var(--warning-color);
+      margin-right: 0.5rem;
+    }
+  }
+  
+  .quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .quick-action-btn {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    
+    i {
+      font-size: 2rem;
+      color: var(--primary-color);
+    }
+    
+    span {
+      font-weight: 500;
+    }
+    
+    &:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary-color);
+      background: var(--bg-hover);
+      box-shadow: 0 4px 12px rgba(77, 163, 255, 0.15);
+    }
+  }
+}
+
+// Welcome Card (fixed)
+.welcome-card {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, #2450a7 0%, var(--bg-hover) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  max-width: 300px;
+  
+  .welcome-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    i {
+      color: white;
+      font-size: 1.25rem;
+    }
+  }
+  
+  .welcome-text {
+    flex: 1;
+    
+    h3 {
+      font-size: 0.9rem;
+      margin: 0 0 0.25rem 0;
+      color: white;
+    }
+    
+    p {
+      font-size: 0.8rem;
+      margin: 0 0 0.5rem 0;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .user-badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.65rem;
+      color: white;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation-delay-1 { animation: fadeIn 0.5s ease 0.1s backwards; }
+.animation-delay-2 { animation: fadeIn 0.5s ease 0.2s backwards; }
+.animation-delay-3 { animation: fadeIn 0.5s ease 0.3s backwards; }
+.animation-delay-4 { animation: fadeIn 0.5s ease 0.4s backwards; }
+.animation-delay-5 { animation: fadeIn 0.5s ease 0.5s backwards; }
+.animation-delay-6 { animation: fadeIn 0.5s ease 0.6s backwards; }
+.animation-delay-7 { animation: fadeIn 0.5s ease 0.7s backwards; }
+
+// Responsive
 @media (max-width: 768px) {
   .home-container {
     padding: 1rem 0;
@@ -190,15 +329,26 @@
     font-size: 1.5rem;
   }
   
-  .stats-grid {
-    grid-template-columns: 1fr;
+  .stat-card {
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+    }
+    
+    .stat-content .stat-value {
+      font-size: 1.5rem;
+    }
   }
   
-    .welcome-card {
-    position: fixed;
+  .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .welcome-card {
     bottom: 1rem;
-    right: 1rem;
     left: 1rem;
+    right: 1rem;
     max-width: none;
   }
 }

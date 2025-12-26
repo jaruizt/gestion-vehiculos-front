@@ -1,0 +1,53 @@
+<div class="facturas-container">
+  <div class="container-fluid">
+    <!-- Header -->
+    <div class="page-header">
+      <div>
+        <h1>
+          <i class="bi bi-receipt"></i>
+          Gestión de Facturas
+        </h1>
+        <p class="page-subtitle">Administra facturas de compra y venta</p>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs custom-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="tabActiva === 'compra'"
+          (click)="cambiarTab('compra')"
+          type="button"
+        >
+          <i class="bi bi-arrow-down-circle"></i>
+          Facturas de Compra
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          [class.active]="tabActiva === 'venta'"
+          (click)="cambiarTab('venta')"
+          type="button"
+        >
+          <i class="bi bi-arrow-up-circle"></i>
+          Facturas de Venta
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- Facturas de Compra -->
+      <div *ngIf="tabActiva === 'compra'" class="tab-pane fade-in">
+        <app-factura-compra-list></app-factura-compra-list>
+      </div>
+
+      <!-- Facturas de Venta -->
+      <div *ngIf="tabActiva === 'venta'" class="tab-pane fade-in">
+        <app-factura-venta-list></app-factura-venta-list>
+      </div>
+    </div>
+  </div>
+</div>

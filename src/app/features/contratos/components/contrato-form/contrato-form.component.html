@@ -1,0 +1,157 @@
+<div class="modal-backdrop" (click)="cerrar.emit()"></div>
+
+<div class="modal-container">
+  <div class="modal-content-custom">
+    <!-- Header -->
+    <div class="modal-header-custom">
+      <h3>
+        <i class="bi" [ngClass]="esEdicion ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+        {{ esEdicion ? 'Editar Contrato' : 'Nuevo Contrato' }}
+      </h3>
+      <button class="btn-close-custom" (click)="cerrar.emit()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body-custom">
+      <form [formGroup]="contratoForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <!-- Vehículo -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-car-front-fill"></i>
+              Vehículo *
+            </label>
+            <select
+              class="form-select"
+              formControlName="vehiculoId"
+              [class.is-invalid]="isFieldInvalid('vehiculoId')"
+            >
+              <option value="">Selecciona un vehículo...</option>
+              <option *ngFor="let vehiculo of vehiculosDisponibles" [value]="vehiculo.id">
+                {{ vehiculo.matricula }} - {{ vehiculo.marca }} {{ vehiculo.modelo }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('vehiculoId')">
+              El vehículo es obligatorio
+            </div>
+          </div>
+
+          <!-- Cliente -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-person-fill"></i>
+              Cliente *
+            </label>
+            <select
+              class="form-select"
+              formControlName="clienteId"
+              [class.is-invalid]="isFieldInvalid('clienteId')"
+            >
+              <option value="">Selecciona un cliente...</option>
+              <option *ngFor="let cliente of clientes" [value]="cliente.id">
+                {{ cliente.nombre }} - {{ cliente.dni }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('clienteId')">
+              El cliente es obligatorio
+            </div>
+          </div>
+
+          <!-- Fecha Inicio -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-calendar-check"></i>
+              Fecha Inicio *
+            </label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="fechaInicio"
+              [class.is-invalid]="isFieldInvalid('fechaInicio')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('fechaInicio')">
+              La fecha de inicio es obligatoria
+            </div>
+          </div>
+
+          <!-- Fecha Fin -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-calendar-x"></i>
+              Fecha Fin *
+            </label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="fechaFin"
+              [class.is-invalid]="isFieldInvalid('fechaFin')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('fechaFin')">
+              La fecha de fin es obligatoria y debe ser posterior a la de inicio
+            </div>
+          </div>
+
+          <!-- Cuota Mensual -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-currency-euro"></i>
+              Cuota Mensual *
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="cuotaMensual"
+              placeholder="299.99"
+              step="0.01"
+              min="0"
+              [class.is-invalid]="isFieldInvalid('cuotaMensual')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('cuotaMensual')">
+              La cuota mensual es obligatoria (mínimo 0)
+            </div>
+          </div>
+
+          <!-- Día de Cobro -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-calendar-day"></i>
+              Día de Cobro *
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="diaCobroCuota"
+              placeholder="5"
+              min="1"
+              max="31"
+              [class.is-invalid]="isFieldInvalid('diaCobroCuota')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('diaCobroCuota')">
+              El día de cobro es obligatorio (entre 1 y 31)
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer-custom">
+          <button type="button" class="btn btn-secondary" (click)="cerrar.emit()">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="!loading">
+              <i class="bi" [ngClass]="esEdicion ? 'bi-check-circle' : 'bi-plus-circle'"></i>
+              {{ esEdicion ? 'Guardar Cambios' : 'Crear Contrato' }}
+            </span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Guardando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

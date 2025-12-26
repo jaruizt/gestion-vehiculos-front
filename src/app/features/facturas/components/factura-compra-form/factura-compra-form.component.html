@@ -1,0 +1,151 @@
+<div class="modal-backdrop" (click)="cerrar.emit()"></div>
+
+<div class="modal-container">
+  <div class="modal-content-custom">
+    <!-- Header -->
+    <div class="modal-header-custom">
+      <h3>
+        <i class="bi" [ngClass]="esEdicion ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+        {{ esEdicion ? 'Editar Factura de Compra' : 'Nueva Factura de Compra' }}
+      </h3>
+      <button class="btn-close-custom" (click)="cerrar.emit()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body-custom">
+      <form [formGroup]="facturaForm" (ngSubmit)="onSubmit()">
+        <div class="row g-3">
+          <!-- Vehículo -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-car-front-fill"></i>
+              Vehículo *
+            </label>
+            <select
+              class="form-select"
+              formControlName="vehiculoId"
+              [class.is-invalid]="isFieldInvalid('vehiculoId')"
+            >
+              <option value="">Selecciona un vehículo...</option>
+              <option *ngFor="let vehiculo of vehiculos" [value]="vehiculo.id">
+                {{ vehiculo.matricula }} - {{ vehiculo.marca }} {{ vehiculo.modelo }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('vehiculoId')">
+              El vehículo es obligatorio
+            </div>
+          </div>
+
+          <!-- Proveedor -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-building"></i>
+              Proveedor *
+            </label>
+            <select
+              class="form-select"
+              formControlName="proveedorId"
+              [class.is-invalid]="isFieldInvalid('proveedorId')"
+            >
+              <option value="">Selecciona un proveedor...</option>
+              <option *ngFor="let proveedor of proveedores" [value]="proveedor.id">
+                {{ proveedor.nombre }} - {{ proveedor.cif }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('proveedorId')">
+              El proveedor es obligatorio
+            </div>
+            <small class="form-text text-muted">
+              ¿No encuentras el proveedor? 
+              <a href="#" class="text-primary" (click)="$event.preventDefault(); abrirModalProveedor()">
+                Crear nuevo proveedor
+              </a>
+            </small>
+          </div>
+
+          <!-- Número de Factura -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-hash"></i>
+              Número de Factura *
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="numeroFactura"
+              placeholder="FC-2024-001"
+              [class.is-invalid]="isFieldInvalid('numeroFactura')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('numeroFactura')">
+              El número de factura es obligatorio (máx. 50 caracteres)
+            </div>
+          </div>
+
+          <!-- Fecha de Factura -->
+          <div class="col-md-6">
+            <label class="form-label">
+              <i class="bi bi-calendar"></i>
+              Fecha de Factura *
+            </label>
+            <input
+              type="date"
+              class="form-control"
+              formControlName="fechaFactura"
+              [class.is-invalid]="isFieldInvalid('fechaFactura')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('fechaFactura')">
+              La fecha de factura es obligatoria
+            </div>
+          </div>
+
+          <!-- Importe Total -->
+          <div class="col-md-12">
+            <label class="form-label">
+              <i class="bi bi-currency-euro"></i>
+              Importe Total *
+            </label>
+            <input
+              type="number"
+              class="form-control"
+              formControlName="importeTotal"
+              placeholder="15000.00"
+              step="0.01"
+              min="0"
+              [class.is-invalid]="isFieldInvalid('importeTotal')"
+            />
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('importeTotal')">
+              El importe total es obligatorio (mínimo 0)
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer-custom">
+          <button type="button" class="btn btn-secondary" (click)="cerrar.emit()">
+            <i class="bi bi-x-circle"></i>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            <span *ngIf="!loading">
+              <i class="bi" [ngClass]="esEdicion ? 'bi-check-circle' : 'bi-plus-circle'"></i>
+              {{ esEdicion ? 'Guardar Cambios' : 'Crear Factura' }}
+            </span>
+            <span *ngIf="loading">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Guardando...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Proveedor -->
+<app-proveedor-form
+  *ngIf="mostrarModalProveedor"
+  (cerrar)="cerrarModalProveedor()"
+  (guardado)="onProveedorGuardado()"
+></app-proveedor-form>

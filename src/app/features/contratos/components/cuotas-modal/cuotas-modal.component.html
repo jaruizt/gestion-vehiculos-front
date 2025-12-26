@@ -1,0 +1,105 @@
+<p>cuotas-modal works!</p>
+<div class="modal-backdrop" (click)="cerrar.emit()"></div>
+
+<div class="modal-container">
+  <div class="modal-content-custom">
+    <!-- Header -->
+    <div class="modal-header-custom">
+      <h3>
+        <i class="bi bi-list-check"></i>
+        Cuotas del Contrato
+      </h3>
+      <button class="btn-close-custom" (click)="cerrar.emit()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body-custom">
+      <!-- Info Contrato -->
+      <div class="contrato-info" *ngIf="contrato">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="info-label">Vehículo:</label>
+            <p class="info-value">
+              <strong>{{ contrato.vehiculoMatricula }}</strong><br>
+              <small>{{ contrato.vehiculoMarcaModelo }}</small>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <label class="info-label">Cliente:</label>
+            <p class="info-value">
+              <strong>{{ contrato.clienteNombre }}</strong><br>
+              <small>{{ contrato.clienteDni }}</small>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <label class="info-label">Cuota Mensual:</label>
+            <p class="info-value">
+              <strong class="text-primary">{{ contrato.cuotaMensual | number:'1.2-2' }} €</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="loading" class="spinner-container">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <!-- Tabla de Cuotas -->
+      <div *ngIf="!loading && cuotas.length > 0" class="cuotas-table">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nº</th>
+              <th>Fecha Vencimiento</th>
+              <th>Importe</th>
+              <th>Estado</th>
+              <th>Fecha Pago</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cuota of cuotas">
+              <td>
+                <strong>{{ cuota.numeroCuota }}</strong>
+              </td>
+              <td>{{ cuota.fechaVencimiento | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <strong>{{ cuota.importe | number:'1.2-2' }} €</strong>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="obtenerClaseEstado(cuota.estadoNombre)">
+                  {{ cuota.estadoNombre }}
+                </span>
+              </td>
+              <td>
+                <span *ngIf="cuota.fechaPago">
+                  {{ cuota.fechaPago | date:'dd/MM/yyyy' }}
+                </span>
+                <span *ngIf="!cuota.fechaPago" class="text-muted">-</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && cuotas.length === 0" class="empty-state">
+        <i class="bi bi-inbox"></i>
+        <h5>No hay cuotas</h5>
+        <p>Este contrato aún no tiene cuotas generadas</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer-custom">
+      <button type="button" class="btn btn-secondary" (click)="cerrar.emit()">
+        <i class="bi bi-x-circle"></i>
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+.facturas-venta-content {
+  .content-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.filters-container {
+  margin-bottom: 2rem;
+  
+  .search-box {
+    position: relative;
+    
+    i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+    
+    .form-control {
+      padding-left: 3rem;
+    }
+  }
+}
+
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  
+  i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+    color: var(--primary-color);
+  }
+  
+  h5 {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+  }
+  
+  p {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .table {
+    font-size: 0.875rem;
+    
+    th, td {
+      white-space: nowrap;
+    }
+  }
+}

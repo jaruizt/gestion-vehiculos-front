@@ -1,67 +1,191 @@
 <div class="home-container">
   <div class="container-fluid">
-    <!-- Header -->
+    <!-- Page Header -->
     <div class="page-header">
-      <h1>
-        <i class="bi bi-speedometer2"></i>
-        Panel de control
-      </h1>
-      <p class="page-subtitle">Vista general del sistema</p>
+      <div>
+        <h1>Panel de Control</h1>
+        <p class="page-subtitle">Vista general del sistema</p>
+      </div>
     </div>
 
-    <!-- Alert Bienvenida -->
-    <div class="welcome-card fade-in" *ngIf="currentUser">
-      <div class="welcome-content">
-        <div class="welcome-icon">
-          <i class="bi bi-emoji-smile"></i>
-        </div>
-        <div class="welcome-text">
-          <h3>¡Bienvenido de nuevo!</h3>
-          <p>
-            <strong>{{ currentUser.nombre }} {{ currentUser.apellidos }}</strong>
-            <span class="user-badge">{{ currentUser.rol }}</span>
-          </p>
-        </div>
+    <!-- Loading -->
+    <div *ngIf="loading" class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
       </div>
     </div>
 
     <!-- Stats Cards -->
-    <div class="stats-grid">
-      <div class="stat-card fade-in" style="animation-delay: 0.1s;">
-        <div class="stat-icon blue">
-          <i class="bi bi-car-front-fill"></i>
-        </div>
-        <div class="stat-content">
-          <p>Vehículos</p>
-        </div>
-      </div>
-
-      <div class="stat-card fade-in" style="animation-delay: 0.2s;">
-        <div class="stat-icon blue">
-          <i class="bi bi-people-fill"></i>
-        </div>
-        <div class="stat-content">
-          <p>Clientes</p>
+    <div *ngIf="!loading && estadisticas" class="row g-4 mb-4">
+      <!-- Total Vehículos -->
+      <div class="col-md-3 col-sm-6 animation-delay-1">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="bi bi-car-front-fill"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ estadisticas.totalVehiculos }}</div>
+            <div class="stat-label">Vehículos</div>
+          </div>
         </div>
       </div>
 
-      <div class="stat-card fade-in" style="animation-delay: 0.3s;">
-        <div class="stat-icon blue">
-          <i class="bi bi-file-text-fill"></i>
-        </div>
-        <div class="stat-content">
-          <p>Contratos Activos</p>
+      <!-- Total Clientes -->
+      <div class="col-md-3 col-sm-6 animation-delay-2">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ estadisticas.totalClientes }}</div>
+            <div class="stat-label">Clientes</div>
+          </div>
         </div>
       </div>
 
-      <div class="stat-card fade-in" style="animation-delay: 0.4s;">
-        <div class="stat-icon blue">
-          <i class="bi bi-currency-euro"></i>
-        </div>
-        <div class="stat-content">
-          <p>Ingresos Mes</p>
+      <!-- Total Contratos -->
+      <div class="col-md-3 col-sm-6 animation-delay-3">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="bi bi-file-text-fill"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ estadisticas.totalContratos }}</div>
+            <div class="stat-label">Contratos</div>
+          </div>
         </div>
       </div>
+
+      <!-- Ingresos Mensuales -->
+      <div class="col-md-3 col-sm-6 animation-delay-4">
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <i class="bi bi-currency-euro"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ estadisticas.ingresosMensuales | number:'1.0-0' }}€</div>
+            <div class="stat-label">Ingresos Mensuales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div *ngIf="!loading && estadisticas" class="row g-4 mb-4">
+      <!-- Vehículos por Situación -->
+      <div class="col-lg-6 animation-delay-5">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h5>
+              <i class="bi bi-car-front"></i>
+              Vehículos por Situación
+            </h5>
+          </div>
+          <div class="chart-body">
+            <div *ngIf="estadisticas.vehiculosPorSituacion.length > 0" class="chart-list">
+              <div *ngFor="let item of estadisticas.vehiculosPorSituacion" class="chart-item">
+                <div class="chart-item-label">
+                  <span class="badge" [ngClass]="obtenerClaseSituacion(item.situacion)">
+                    {{ item.situacion }}
+                  </span>
+                </div>
+                <div class="chart-item-value">
+                  <strong>{{ item.cantidad }}</strong>
+                </div>
+                <div class="chart-item-bar">
+                  <div 
+                    class="chart-bar-fill" 
+                    [style.width.%]="calcularPorcentaje(item.cantidad, estadisticas.totalVehiculos)"
+                    [ngClass]="obtenerClaseSituacion(item.situacion)"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="estadisticas.vehiculosPorSituacion.length === 0" class="empty-chart">
+              <i class="bi bi-inbox"></i>
+              <p>No hay datos disponibles</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!-- Contratos por Estado -->
+<div class="col-lg-6 animation-delay-6">
+  <div class="chart-card">
+    <div class="chart-header">
+      <h5>
+        <i class="bi bi-file-text"></i>
+        Contratos por Estado
+      </h5>
+    </div>
+    <div class="chart-body">
+      <div *ngIf="estadisticas.contratosPorEstado.length > 0" class="chart-list">
+        <div *ngFor="let item of estadisticas.contratosPorEstado" class="chart-item">
+          <div class="chart-item-label">
+            <span class="badge" [ngClass]="obtenerClaseEstado(item.situacion)">
+              {{ item.situacion }} 
+            </span>
+          </div>
+          <div class="chart-item-value">
+            <strong>{{ item.cantidad }}</strong>
+          </div>
+          <div class="chart-item-bar">
+            <div 
+              class="chart-bar-fill" 
+              [style.width.%]="calcularPorcentaje(item.cantidad, estadisticas.totalContratos)"
+              [ngClass]="obtenerClaseEstado(item.situacion)"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="estadisticas.contratosPorEstado.length === 0" class="empty-chart">
+        <i class="bi bi-inbox"></i>
+        <p>No hay datos disponibles</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Quick Actions -->
+    <div *ngIf="!loading" class="row g-4 animation-delay-7">
+      <div class="col-12">
+        <div class="quick-actions-card">
+          <h5>
+            <i class="bi bi-lightning-fill"></i>
+            Acciones Rápidas
+          </h5>
+          <div class="quick-actions-grid">
+            <a routerLink="/vehiculos" class="quick-action-btn">
+              <i class="bi bi-plus-circle"></i>
+              <span>Nuevo Vehículo</span>
+            </a>
+            <a routerLink="/clientes" class="quick-action-btn">
+              <i class="bi bi-person-plus"></i>
+              <span>Nuevo Cliente</span>
+            </a>
+            <a routerLink="/contratos" class="quick-action-btn">
+              <i class="bi bi-file-earmark-plus"></i>
+              <span>Nuevo Contrato</span>
+            </a>
+            <a routerLink="/facturas" class="quick-action-btn">
+              <i class="bi bi-receipt"></i>
+              <span>Nueva Factura</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Card (fixed position) -->
+  <div class="welcome-card">
+    <div class="welcome-icon">
+      <i class="bi bi-speedometer2"></i>
+    </div>
+    <div class="welcome-text">
+      <h3>¡Bienvenido!</h3>
+      <p>{{ nombreUsuario }}</p>
+      <span class="user-badge">{{ rolUsuario }}</span>
     </div>
   </div>
 </div>

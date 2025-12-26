@@ -1,0 +1,35 @@
+@import '../../../vehiculos/components/vehiculo-form/vehiculo-form.component.scss';
+
+.contrato-info {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  .info-label {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
+  
+  .info-value {
+    margin: 0;
+    color: var(--text-primary);
+    
+    small {
+      color: var(--text-muted);
+    }
+  }
+}
+
+.cuotas-table {
+  .table {
+    margin: 0;
+  }
+}
+
+.spinner-container {
+  padding: 3rem 0;
+}
