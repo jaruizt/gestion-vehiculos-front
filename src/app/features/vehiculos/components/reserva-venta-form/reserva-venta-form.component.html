@@ -1,0 +1,154 @@
+<div class="modal-overlay" (click)="cerrar.emit()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <i class="bi bi-bookmark-plus"></i>
+        Reservar Vehículo para Venta
+      </h5>
+      <button 
+        type="button" 
+        class="btn-close" 
+        (click)="cerrar.emit()"
+        aria-label="Close">
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <!-- Info del vehículo -->
+      <div class="alert alert-info mb-3" *ngIf="vehiculo">
+        <strong>Vehículo:</strong> {{ vehiculo.marca }} {{ vehiculo.modelo }} - 
+        <strong>Matrícula:</strong> {{ vehiculo.matricula }}
+      </div>
+
+      <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <!-- Cliente -->
+          <div class="col-12 mb-3">
+            <label for="clienteId" class="form-label">
+              <i class="bi bi-person"></i>
+              Cliente *
+            </label>
+            <select
+              id="clienteId"
+              formControlName="clienteId"
+              class="form-select"
+              [class.is-invalid]="isFieldInvalid('clienteId')">
+              <option value="">Seleccione un cliente</option>
+              <option *ngFor="let cliente of clientes" [value]="cliente.id">
+                {{ cliente.nombre }} {{ cliente.apellidos }} - {{ cliente.documento }}
+              </option>
+            </select>
+            <div *ngIf="isFieldInvalid('clienteId')" class="invalid-feedback">
+              El cliente es obligatorio
+            </div>
+          </div>
+
+          <!-- Precio Reserva -->
+          <div class="col-md-6 mb-3">
+            <label for="precioReserva" class="form-label">
+              <i class="bi bi-cash"></i>
+              Precio de Reserva *
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">€</span>
+              <input
+                type="number"
+                id="precioReserva"
+                formControlName="precioReserva"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('precioReserva')"
+                placeholder="0.00"
+                step="0.01"
+                min="0">
+            </div>
+            <div *ngIf="isFieldInvalid('precioReserva')" class="invalid-feedback d-block">
+              El precio es obligatorio y debe ser mayor a 0
+            </div>
+          </div>
+
+          <!-- Señal Pagada -->
+          <div class="col-md-6 mb-3">
+            <label for="senalPagada" class="form-label">
+              <i class="bi bi-currency-euro"></i>
+              Señal Pagada
+            </label>
+            <div class="input-group">
+              <span class="input-group-text">€</span>
+              <input
+                type="number"
+                id="senalPagada"
+                formControlName="senalPagada"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('senalPagada')"
+                placeholder="0.00"
+                step="0.01"
+                min="0">
+            </div>
+            <div *ngIf="isFieldInvalid('senalPagada')" class="invalid-feedback d-block">
+              La señal debe ser mayor o igual a 0
+            </div>
+          </div>
+
+          <!-- Fecha Límite -->
+          <div class="col-12 mb-3">
+            <label for="fechaLimite" class="form-label">
+              <i class="bi bi-calendar-event"></i>
+              Fecha Límite
+            </label>
+            <input
+              type="date"
+              id="fechaLimite"
+              formControlName="fechaLimite"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('fechaLimite')">
+            <small class="form-text text-muted">
+              Fecha hasta la cual la reserva es válida (por defecto 15 días)
+            </small>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="col-12 mb-3">
+            <label for="observaciones" class="form-label">
+              <i class="bi bi-card-text"></i>
+              Observaciones
+            </label>
+            <textarea
+              id="observaciones"
+              formControlName="observaciones"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('observaciones')"
+              rows="3"
+              maxlength="500"
+              placeholder="Notas adicionales sobre la reserva..."></textarea>
+            <div *ngIf="isFieldInvalid('observaciones')" class="invalid-feedback">
+              Las observaciones no pueden superar los 500 caracteres
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="cerrar.emit()"
+        [disabled]="loading">
+        <i class="bi bi-x-circle"></i>
+        Cancelar
+      </button>
+      <button 
+        type="submit" 
+        class="btn btn-primary"
+        (click)="onSubmit()"
+        [disabled]="loading || reservaForm.invalid">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+        <i *ngIf="!loading" class="bi bi-bookmark-check"></i>
+        {{ loading ? 'Guardando...' : 'Crear Reserva' }}
+      </button>
+    </div>
+  </div>
+</div>

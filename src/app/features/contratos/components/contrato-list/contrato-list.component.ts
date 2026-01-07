@@ -26,6 +26,7 @@ export class ContratoListComponent implements OnInit {
   mostrarModalCuotas = false;
   esEdicion = false;
   contratoSeleccionado: ContratoRentingResponse | null = null;
+  mostrarModalDetalle = false;
 
   constructor(
     private contratoService: ContratoService,
@@ -103,9 +104,46 @@ export class ContratoListComponent implements OnInit {
 
   verDetalle(contrato: ContratoRentingResponse): void {
     console.log('Ver detalle:', contrato);
+    this.contratoSeleccionado = contrato;
+    this.mostrarModalDetalle = true;
   }
 
-  confirmarFinalizar(contrato: ContratoRentingResponse): void {
+  cerrarModalDetalle(): void {
+    this.mostrarModalDetalle = false;
+    this.contratoSeleccionado = null;
+  }
+
+  activarContrato(contrato: ContratoRentingResponse): void {
+    if (confirm(`¿Está seguro de activar el contrato ${contrato.numeroContrato}?`)) {
+      this.contratoService.activarContrato(contrato.id).subscribe({
+        next: () => {
+          this.toastr.success('Contrato activado correctamente', '¡Éxito!');
+          this.cargarContratos();
+        },
+        error: (error) => {
+          this.toastr.error('Error al activar el contrato', 'Error');
+        }
+      });
+    }
+  }
+
+  cancelarContrato(contrato: ContratoRentingResponse): void {
+    const motivo = prompt(`Ingrese el motivo de cancelación del contrato ${contrato.numeroContrato}:`);
+    
+    if (motivo && motivo.trim() !== '') {
+      this.contratoService.cancelarContrato(contrato.id, motivo).subscribe({
+        next: () => {
+          this.toastr.success('Contrato cancelado correctamente', '¡Éxito!');
+          this.cargarContratos();
+        },
+        error: (error) => {
+          this.toastr.error('Error al cancelar el contrato', 'Error');
+        }
+      });
+    }
+  }
+
+  finalizarContrato(contrato: ContratoRentingResponse): void {
     if (confirm(`¿Estás seguro de finalizar el contrato del vehículo ${contrato.vehiculoMatricula}?`)) {
       this.contratoService.finalizarContrato(contrato.id).subscribe({
         next: () => {
@@ -129,10 +167,11 @@ export class ContratoListComponent implements OnInit {
 
   obtenerClaseEstado(estado?: string): string {
     const clases: { [key: string]: string } = {
+      'PENDIENTE': 'badge-reservado',
       'ACTIVO': 'badge-renting',
       'FINALIZADO': 'badge-vendido',
       'CANCELADO': 'badge-vendido'
     };
-    return clases[estado || ''] || '';
+      return clases[estado || '']; 
   }
 }

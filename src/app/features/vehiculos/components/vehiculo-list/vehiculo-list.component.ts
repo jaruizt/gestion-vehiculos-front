@@ -5,11 +5,13 @@ import { ToastrService } from 'ngx-toastr';
 import { VehiculoService } from '../../services/vehiculo.service';
 import { VehiculoResponse } from '../../../../core/models';
 import { VehiculoFormComponent } from '../vehiculo-form/vehiculo-form.component';
+import { ReservaVentaFormComponent } from '../reserva-venta-form/reserva-venta-form.component';
+import { ReservaVentaService, ReservaVentaResponse } from '../../services/reserva-venta.service';
 
 @Component({
   selector: 'app-vehiculo-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, VehiculoFormComponent],
+  imports: [CommonModule, FormsModule, VehiculoFormComponent, ReservaVentaFormComponent],
   templateUrl: './vehiculo-list.component.html',
   styleUrls: ['./vehiculo-list.component.scss']
 })
@@ -26,8 +28,18 @@ export class VehiculoListComponent implements OnInit {
   esEdicion = false;
   vehiculoSeleccionado: VehiculoResponse | null = null;
 
+  mostrarModalDetalle = false;
+  vehiculoDetalle: VehiculoResponse | null = null;
+
+  mostrarModalReserva = false;
+  mostrarModalVenta = false;
+  mostrarModalReservaDetalle = false;
+  reservaDetalle: ReservaVentaResponse | null = null;
+  loadingReserva = false;
+
   constructor(
     private vehiculoService: VehiculoService,
+    private reservaVentaService: ReservaVentaService,
     private toastr: ToastrService
   ) {}
 
@@ -93,8 +105,14 @@ export class VehiculoListComponent implements OnInit {
   }
 
   verDetalle(vehiculo: VehiculoResponse): void {
-    // Implementar después
     console.log('Ver detalle:', vehiculo);
+    this.vehiculoDetalle = vehiculo;
+    this.mostrarModalDetalle = true;
+  }
+
+  cerrarModalDetalle(): void {
+    this.mostrarModalDetalle = false;
+    this.vehiculoDetalle = null;
   }
 
   confirmarEliminar(vehiculo: VehiculoResponse): void {
@@ -116,5 +134,96 @@ export class VehiculoListComponent implements OnInit {
       'VENDIDO': 'badge-vendido'
     };
     return clases[situacion || ''] || '';
+  }
+
+// Métodos:
+abrirModalReserva(vehiculo: VehiculoResponse): void {
+  console.log('Ver reserva:', vehiculo);
+  this.vehiculoSeleccionado = vehiculo;
+  this.mostrarModalReserva = true;
+}
+
+cerrarModalReserva(): void {
+  this.mostrarModalReserva = false;
+  this.vehiculoSeleccionado = null;
+}
+
+onReservaCreada(): void {
+  this.cerrarModalReserva();
+  this.cargarVehiculos();
+}
+
+abrirModalVenta(vehiculo: VehiculoResponse): void {
+  this.vehiculoSeleccionado = vehiculo;
+  this.mostrarModalVenta = true;
+}
+
+cerrarModalVenta(): void {
+  this.mostrarModalVenta = false;
+  this.vehiculoSeleccionado = null;
+}
+
+onVentaCreada(): void {
+  this.cerrarModalVenta();
+  this.cargarVehiculos();
+}
+
+verReserva(vehiculo: VehiculoResponse): void {
+  this.loadingReserva = true;
+  // Buscar la reserva activa del vehículo
+  this.reservaVentaService.listarActivas().subscribe({
+    next: (reservas) => {
+      const reserva = reservas.find(r => r.vehiculoId === vehiculo.id);
+      
+      if (reserva) {
+        console.log('Ver reserva:', reserva);
+        this.reservaDetalle = reserva;
+        this.mostrarModalReservaDetalle = true;
+      } else {
+        this.toastr.warning('No se encontró reserva activa para este vehículo', 'Advertencia');
+      }
+      
+      this.loadingReserva = false;
+    },
+    error: () => {
+      this.toastr.error('Error al cargar la reserva', 'Error');
+      this.loadingReserva = false;
+    }
+  });
+}
+
+cerrarModalReservaDetalle(): void {
+  this.mostrarModalReservaDetalle = false;
+  this.reservaDetalle = null;
+}
+
+confirmarCancelarReserva(): void {
+  if (!this.reservaDetalle) return;
+  
+  const motivo = prompt('Ingrese el motivo de cancelación:');
+  
+  if (motivo && motivo.trim() !== '') {
+    this.reservaVentaService.cancelar(this.reservaDetalle.id, motivo).subscribe({
+      next: () => {
+        this.toastr.success('Reserva cancelada correctamente', '¡Éxito!');
+        this.cerrarModalReservaDetalle();
+        this.cargarVehiculos();
+      },
+      error: () => {
+        this.toastr.error('Error al cancelar la reserva', 'Error');
+      }
+    });
+  }
+}
+
+  obtenerClaseEstadoReserva(estado?: string): string {
+    console.log('Ver estado:', estado);
+    const clases: { [key: string]: string } = {
+      'PENDIENTE': 'bg-warning text-dark',
+      'CONFIRMADA': 'bg-success text-white',
+      'CANCELADA': 'bg-danger text-white',
+      'EXPIRADA': 'bg-secondary text-white'
+    };
+    return clases[estado || ''] || 'bg-secondary text-white';
   }
 }

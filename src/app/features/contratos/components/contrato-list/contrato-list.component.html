@@ -100,6 +100,31 @@
             </td>
             <td>
               <div class="action-buttons justify-content-end">
+                 <button 
+                    *ngIf="contrato.estadoNombre === 'PENDIENTE'"
+                    (click)="activarContrato(contrato)"
+                    class="btn btn-sm btn-outline-success me-1"
+                    title="Activar contrato">
+                    <i class="bi bi-play-fill"></i>
+                  </button>
+                  
+                  <!-- Botón Finalizar (solo si está ACTIVO) -->
+                  <button 
+                    *ngIf="contrato.estadoNombre === 'ACTIVO'"
+                    (click)="finalizarContrato(contrato)"
+                   class="btn btn-sm btn-outline-info me-1"
+                    title="Finalizar contrato">
+                    <i class="bi bi-check-circle-fill"></i>
+                  </button>
+                  
+                  <!-- Botón Cancelar (solo si NO está FINALIZADO ni CANCELADO) -->
+                  <button 
+                    *ngIf="contrato.estadoNombre !== 'FINALIZADO' && contrato.estadoNombre !== 'CANCELADO'"
+                    (click)="cancelarContrato(contrato)"
+                    class="btn btn-sm btn-outline-warning me-1"
+                    title="Cancelar contrato">
+                 <i class="bi bi-x-circle"></i>
+                  </button>
                 <button
                   class="btn btn-sm btn-outline-info"
                   (click)="verCuotas(contrato)"
@@ -121,14 +146,6 @@
                   title="Editar"
                 >
                   <i class="bi bi-pencil"></i>
-                </button>
-                <button
-                  *ngIf="contrato.estadoNombre === 'ACTIVO'"
-                  class="btn btn-sm btn-outline-success"
-                  (click)="confirmarFinalizar(contrato)"
-                  title="Finalizar"
-                >
-                  <i class="bi bi-check-circle"></i>
                 </button>
                 <button
                   class="btn btn-sm btn-outline-danger"
@@ -158,6 +175,62 @@
         <i class="bi bi-plus-circle"></i>
         Crear Contrato
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalle -->
+<div 
+  *ngIf="mostrarModalDetalle && contratoSeleccionado" 
+  class="modal"
+  style="display: block; background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-file-contract"></i>
+          Detalle del Contrato {{ contratoSeleccionado.numeroContrato }}
+        </h5>
+        <button 
+          type="button" 
+          class="btn-close" 
+          (click)="cerrarModalDetalle()">
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Cliente:</strong> {{ contratoSeleccionado.clienteNombre }}</p>
+            <p><strong>Vehículo:</strong> {{ contratoSeleccionado.vehiculoMatricula }}</p>
+            <p><strong>Estado:</strong> 
+              <span class="badge" [ngClass]="obtenerClaseEstado(contratoSeleccionado.estadoNombre)">
+                {{ contratoSeleccionado.estadoNombre }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Fecha Inicio:</strong> {{ contratoSeleccionado.fechaInicio | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Fecha Fin:</strong> {{ contratoSeleccionado.fechaFin | date:'dd/MM/yyyy' }}</p>
+            <p><strong>Duración:</strong> {{ contratoSeleccionado.duracionMeses }} meses</p>
+            <p><strong>Cuota Mensual:</strong> {{ contratoSeleccionado.cuotaMensual | currency:'EUR' }}</p>
+          </div>
+        </div>
+        
+        <div *ngIf="contratoSeleccionado.observaciones" class="mt-3">
+          <p><strong>Observaciones:</strong></p>
+          <p>{{ contratoSeleccionado.observaciones }}</p>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="cerrarModalDetalle()">
+          Cerrar
+        </button>
+      </div>
     </div>
   </div>
 </div>

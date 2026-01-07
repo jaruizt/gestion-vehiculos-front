@@ -47,7 +47,7 @@
             <input
               type="text"
               class="form-control"
-              formControlName="dni"
+              formControlName="documento"
               placeholder="12345678A / B12345678"
               [class.is-invalid]="isFieldInvalid('dni')"
             />
@@ -71,6 +71,30 @@
             />
             <div class="invalid-feedback" *ngIf="isFieldInvalid('nombre')">
               El nombre es obligatorio (máx. 200 caracteres)
+            </div>
+          </div>
+
+          <!-- Campo Apellidos -->
+          <div class="form-group">
+            <label for="apellidos">
+              <i class="fas fa-user"></i>
+              Apellidos
+              <span *ngIf="clienteForm.get('tipoCliente')?.value === 'PARTICULAR' || 
+                            clienteForm.get('tipoCliente')?.value === 'AUTONOMO'">*</span>
+            </label>
+            <input
+              type="text"
+              id="apellidos"
+              formControlName="apellidos"
+              class="form-control"
+              [class.is-invalid]="isFieldInvalid('apellidos')"
+              placeholder="Ingrese los apellidos"
+              maxlength="200"
+            />
+            <div *ngIf="isFieldInvalid('apellidos')" class="invalid-feedback">
+              <span *ngIf="clienteForm.get('apellidos')?.errors?.['required']">
+                Los apellidos son obligatorios para Particulares y Autónomos
+              </span>
             </div>
           </div>
 

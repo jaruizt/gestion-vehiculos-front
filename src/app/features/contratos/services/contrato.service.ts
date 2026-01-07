@@ -39,4 +39,12 @@ export class ContratoService {
   desactivar(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  activarContrato(id: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/activar`, {});
+  }
+
+  cancelarContrato(id: number, motivo: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${id}/cancelar`, { motivo });
+  }
 }

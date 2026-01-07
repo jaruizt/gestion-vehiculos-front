@@ -102,6 +102,31 @@
             </td>
             <td>
               <div class="action-buttons justify-content-end">
+                <td>
+                  <button 
+                    *ngIf="vehiculo.situacionNombre === 'DISPONIBLE'"
+                    (click)="abrirModalReserva(vehiculo)"
+                    class="btn btn-sm btn-outline-warning me-1"
+                    title="Reservar para venta">
+                    <i class="bi bi-bookmark"></i>
+                  </button>
+                  
+                  <button 
+                    *ngIf="vehiculo.situacionNombre === 'RESERVADO'"
+                    (click)="verReserva(vehiculo)"
+                    class="btn btn-sm btn-outline-info me-1"
+                    title="Ver reserva">
+                    <i class="bi bi-bookmark-check"></i>
+                  </button>
+                  
+                  <button 
+                    *ngIf="vehiculo.situacionNombre === 'RESERVADO' || vehiculo.situacionNombre === 'DISPONIBLE'"
+                    (click)="abrirModalVenta(vehiculo)"
+                    class="btn btn-sm btn-outline-success me-1"
+                    title="Crear factura de venta">
+                    <i class="bi bi-cash-coin"></i>
+                  </button>
+
                 <button
                   class="btn btn-sm btn-outline-primary"
                   (click)="verDetalle(vehiculo)"
@@ -148,6 +173,210 @@
   </div>
 </div>
 
+<!-- Modal Detalle Vehículo -->
+<div 
+  *ngIf="mostrarModalDetalle && vehiculoDetalle" 
+  class="modal-overlay"
+  (click)="cerrarModalDetalle()">
+  <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-car-front"></i>
+          Detalle del Vehículo
+        </h5>
+        <button 
+          type="button" 
+          class="btn-close" 
+          (click)="cerrarModalDetalle()"
+          aria-label="Close">
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <div class="row">
+          <!-- Columna Izquierda -->
+          <div class="col-md-6">
+            <div class="detail-group">
+              <label><i class="bi bi-card-text"></i> Matrícula</label>
+              <p>{{ vehiculoDetalle.matricula }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-car-front-fill"></i> Marca y Modelo</label>
+              <p>{{ vehiculoDetalle.marca }} {{ vehiculoDetalle.modelo }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-calendar"></i> Año de Fabricación</label>
+              <p>{{ vehiculoDetalle.anyoFabricacion }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-palette"></i> Color</label>
+              <p>{{ vehiculoDetalle.color }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-fuel-pump"></i> Combustible</label>
+              <p>{{ vehiculoDetalle.tipoCombustible }}</p>
+            </div>
+          </div>
+
+          <!-- Columna Derecha -->
+          <div class="col-md-6">
+            <div class="detail-group">
+              <label><i class="bi bi-speedometer"></i> Kilómetros</label>
+              <p>{{ vehiculoDetalle.kilometros | number }} km</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-123"></i> Número de Bastidor</label>
+              <p>{{ vehiculoDetalle.numeroBastidor }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-info-circle"></i> Situación</label>
+              <p>
+                <span class="badge" [ngClass]="obtenerClaseSituacion(vehiculoDetalle.situacionNombre)">
+                  {{ vehiculoDetalle.situacionNombre }}
+                </span>
+              </p>
+            </div>
+
+            <div class="detail-group" *ngIf="vehiculoDetalle.fechaCreacion">
+              <label><i class="bi bi-clock"></i> Fecha de Alta</label>
+              <p>{{ vehiculoDetalle.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+
+            <div class="detail-group" *ngIf="vehiculoDetalle.fechaActualizacion">
+              <label><i class="bi bi-clock-history"></i> Última Actualización</label>
+              <p>{{ vehiculoDetalle.fechaActualizacion | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="cerrarModalDetalle()">
+          <i class="bi bi-x-circle"></i>
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalle Reserva -->
+<div 
+  *ngIf="mostrarModalReservaDetalle && reservaDetalle" 
+  class="modal-overlay"
+  (click)="cerrarModalReservaDetalle()">
+  <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-bookmark-check"></i>
+          Detalle de la Reserva
+        </h5>
+        <button 
+          type="button" 
+          class="btn-close" 
+          (click)="cerrarModalReservaDetalle()"
+          aria-label="Close">
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <div class="row">
+          <!-- Información del Vehículo -->
+          <div class="col-12 mb-3">
+            <div class="alert alert-info">
+              <strong><i class="bi bi-car-front"></i> Vehículo:</strong> 
+              {{ reservaDetalle.vehiculoMatricula }}
+            </div>
+          </div>
+
+          <!-- Columna Izquierda -->
+          <div class="col-md-6">
+            <div class="detail-group">
+              <label><i class="bi bi-person"></i> Cliente</label>
+              <p>{{ reservaDetalle.clienteNombre }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-calendar-event"></i> Fecha de Reserva</label>
+              <p>{{ reservaDetalle.fechaReserva | date:'dd/MM/yyyy' }}</p>
+            </div>
+
+            <div class="detail-group" *ngIf="reservaDetalle.fechaLimite">
+              <label><i class="bi bi-calendar-x"></i> Fecha Límite</label>
+              <p>{{ reservaDetalle.fechaLimite | date:'dd/MM/yyyy' }}</p>
+            </div>
+          </div>
+
+          <!-- Columna Derecha -->
+          <div class="col-md-6">
+            <div class="detail-group">
+              <label><i class="bi bi-cash"></i> Precio de Reserva</label>
+              <p class="text-primary fw-bold">{{ reservaDetalle.precioReserva | currency:'EUR' }}</p>
+            </div>
+
+            <div class="detail-group" *ngIf="reservaDetalle.senalPagada">
+              <label><i class="bi bi-currency-euro"></i> Señal Pagada</label>
+              <p class="text-success fw-bold">{{ reservaDetalle.senalPagada | currency:'EUR' }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-info-circle"></i> Estado</label>
+              <p>
+                <span class="badge" [ngClass]="obtenerClaseEstadoReserva(reservaDetalle.estado)">
+                  {{ reservaDetalle.estado }}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="col-12" *ngIf="reservaDetalle.observaciones">
+            <div class="detail-group">
+              <label><i class="bi bi-card-text"></i> Observaciones</label>
+              <p>{{ reservaDetalle.observaciones }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button 
+          type="button" 
+          class="btn btn-danger" 
+          (click)="confirmarCancelarReserva()"
+          *ngIf="reservaDetalle.estadoNombre === 'PENDIENTE'">
+          <i class="bi bi-x-circle"></i>
+          Cancelar Reserva
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="cerrarModalReservaDetalle()">
+          <i class="bi bi-x-circle"></i>
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Crear/Editar (lo crearemos después) -->
  <app-vehiculo-form
   *ngIf="mostrarModal"
@@ -156,3 +385,11 @@
   (cerrar)="cerrarModal()"
   (guardado)="onVehiculoGuardado()"
 ></app-vehiculo-form> 
+
+<!-- Modal Reserva Venta -->
+<app-reserva-venta-form
+  *ngIf="mostrarModalReserva && vehiculoSeleccionado"
+  [vehiculo]="vehiculoSeleccionado"
+  (cerrar)="cerrarModalReserva()"
+  (guardado)="onReservaCreada()">
+</app-reserva-venta-form>

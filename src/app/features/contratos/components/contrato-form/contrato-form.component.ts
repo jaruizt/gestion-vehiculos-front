@@ -39,7 +39,8 @@ export class ContratoFormComponent implements OnInit {
       fechaInicio: ['', Validators.required],
       fechaFin: ['', Validators.required],
       cuotaMensual: ['', [Validators.required, Validators.min(0)]],
-      diaCobroCuota: ['', [Validators.required, Validators.min(1), Validators.max(31)]]
+      diaCobroCuota: ['', [Validators.required, Validators.min(1), Validators.max(31)]],
+      estado: ['PENDIENTE', Validators.required],
     });
   }
 

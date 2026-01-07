@@ -9,6 +9,7 @@ export interface ContratoRentingRequest {
 
 export interface ContratoRentingResponse {
   id: number;
+  numeroContrato: string;
   vehiculoId: number;
   vehiculoMatricula: string;
   vehiculoMarcaModelo: string;
@@ -17,9 +18,14 @@ export interface ContratoRentingResponse {
   clienteDni: string;
   fechaInicio: string;
   fechaFin: string;
+  duracionMeses: number;
   cuotaMensual: number;
   diaCobroCuota: number;
+  kilometrosIncluidos?: number;
+  costeKmExtra?: number;
+  estado: string;
   estadoNombre: string;
+  observaciones?: string;
   activo: boolean;
   fechaCreacion?: string;
   fechaActualizacion?: string;

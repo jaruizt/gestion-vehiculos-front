@@ -2,7 +2,9 @@ export interface ClienteResponse {
   id: number;
   tipoCliente: string;
   dni: string;
+  documento: string;
   nombre: string;
+  apellidos?: string;
   email: string;
   telefono: string;
   direccion: string;

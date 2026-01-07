@@ -28,8 +28,9 @@ export class ClienteFormComponent implements OnInit {
   ) {
     this.clienteForm = this.fb.group({
       tipoCliente: ['', Validators.required],
-      dni: ['', [Validators.required, Validators.maxLength(20)]],
+      documento: ['', [Validators.required, Validators.maxLength(20)]],
       nombre: ['', [Validators.required, Validators.maxLength(200)]],
+      apellidos: ['', Validators.maxLength(200)],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       telefono: ['', [Validators.required, Validators.maxLength(20)]],
       direccion: ['', [Validators.required, Validators.maxLength(500)]]
@@ -40,8 +41,9 @@ export class ClienteFormComponent implements OnInit {
     if (this.esEdicion && this.cliente) {
       this.clienteForm.patchValue({
         tipoCliente: this.cliente.tipoCliente,
-        dni: this.cliente.dni,
+        documento: this.cliente.dni,
         nombre: this.cliente.nombre,
+        apellidos: this.cliente.apellidos,
         email: this.cliente.email,
         telefono: this.cliente.telefono,
         direccion: this.cliente.direccion
