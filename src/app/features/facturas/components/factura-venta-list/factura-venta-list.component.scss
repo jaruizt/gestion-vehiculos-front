@@ -76,3 +76,147 @@
     }
   }
 }
+
+// ========== MODAL ==========
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center; // ✅ Centrado vertical
+  justify-content: center; // ✅ Centrado horizontal
+  z-index: 1050;
+  overflow-y: auto; // ✅ Scroll si es necesario
+  padding: 20px; // ✅ Espaciado
+}
+
+.modal-dialog {
+  width: 90%;
+  max-width: 800px;
+  margin: auto; // ✅ Centrado adicional
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 0.75rem;
+  max-height: 85vh; // ✅ Altura máxima
+  overflow-y: auto; // ✅ Scroll interno si es necesario
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 2px solid #e9ecef;
+  background: #ffffff;
+  border-radius: 0.75rem 0.75rem 0 0;
+  
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #212529;
+    margin: 0;
+
+    i {
+      margin-right: 0.75rem;
+      color: #0d6efd;
+    }
+  }
+}
+
+.modal-body {
+  padding: 2rem 1.5rem;
+  background: #ffffff;
+  
+  .alert {
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    
+    h4 {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 2px solid #e9ecef;
+  background: #ffffff;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+// ========== DETAIL GROUPS ==========
+.detail-group {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  label {
+    font-weight: 700;
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: #212529;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+// ========== RESPONSIVE ==========
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .modal-dialog {
+    width: 95%;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+
+  .detail-group {
+    p {
+      font-size: 1rem;
+    }
+
+    label {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// ========== ANIMACIÓN ==========
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-dialog {
+  animation: fadeIn 0.3s ease-out;
+}

@@ -38,16 +38,9 @@
     </ul>
 
     <!-- Tab Content -->
-    <div class="tab-content">
-      <!-- Facturas de Compra -->
-      <div *ngIf="tabActiva === 'compra'" class="tab-pane fade-in">
-        <app-factura-compra-list></app-factura-compra-list>
-      </div>
-
-      <!-- Facturas de Venta -->
-      <div *ngIf="tabActiva === 'venta'" class="tab-pane fade-in">
-        <app-factura-venta-list></app-factura-venta-list>
-      </div>
+    <div [ngSwitch]="tabActiva">
+      <app-factura-compra-list *ngSwitchCase="'compra'"></app-factura-compra-list>
+      <app-factura-venta-list *ngSwitchCase="'venta'"></app-factura-venta-list>
     </div>
   </div>
 </div>

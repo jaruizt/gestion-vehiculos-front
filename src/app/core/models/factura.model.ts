@@ -37,10 +37,14 @@ export interface FacturaVentaResponse {
   clienteId: number;
   clienteNombre: string;
   clienteDni: string;
+  importeBase: number;
+  iva: number;
+  descuento?: number;
   numeroFactura: string;
   fechaFactura: string;
   importeTotal: number;
   beneficio?: number;
+  observaciones?: string;
   activo: boolean;
   fechaCreacion?: string;
   fechaActualizacion?: string;

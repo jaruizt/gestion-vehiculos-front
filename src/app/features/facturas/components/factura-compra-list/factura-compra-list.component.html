@@ -61,7 +61,7 @@
             <div>
               <strong>{{ factura.vehiculoMatricula }}</strong>
               <br>
-              <small class="text-muted">{{ factura.vehiculoMarcaModelo }}</small>
+              <!-- <small class="text-muted">{{ factura.vehiculoMarcaModelo }}</small> -->
             </div>
           </td>
           <td>{{ factura.proveedorNombre }}</td>
@@ -111,10 +111,10 @@
     <button class="btn btn-primary" (click)="abrirModalCrear()">
       <i class="bi bi-plus-circle"></i>
       Crear Factura
+
     </button>
   </div>
 </div>
-
 <!-- Modal -->
 <app-factura-compra-form
   *ngIf="mostrarModal"

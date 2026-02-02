@@ -21,6 +21,7 @@ export class FacturaVentaListComponent implements OnInit {
   filtroTexto = '';
   
   mostrarModal = false;
+  mostrarModalDetalle = false;
   esEdicion = false;
   facturaSeleccionada: FacturaVentaResponse | null = null;
 
@@ -37,6 +38,7 @@ export class FacturaVentaListComponent implements OnInit {
     this.loading = true;
     this.facturaVentaService.listarActivas().subscribe({
       next: (data) => {
+              console.log('Facturas recibidas:', data); 
         this.facturas = data;
         this.facturasFiltradas = data;
         this.loading = false;
@@ -86,7 +88,26 @@ export class FacturaVentaListComponent implements OnInit {
 
   verDetalle(factura: FacturaVentaResponse): void {
     console.log('Ver detalle:', factura);
+     this.facturaSeleccionada = factura;
+    this.mostrarModalDetalle = true;
   }
+
+  cerrarModalDetalle(): void { 
+    this.mostrarModalDetalle = false;
+    this.facturaSeleccionada = null;
+  }
+
+  calcularPorcentajeBeneficio(factura: FacturaVentaResponse): string {
+  if (!factura.beneficio || !factura.importeTotal) return '0.00';
+  
+  // Calcular precio de compra = precio venta - beneficio
+  const precioCompra = factura.importeTotal - factura.beneficio;
+  
+  if (precioCompra === 0) return '0.00';
+  
+  const porcentaje = (factura.beneficio / precioCompra) * 100;
+  return porcentaje.toFixed(2);
+}
 
   confirmarEliminar(factura: FacturaVentaResponse): void {
     if (confirm(`¿Estás seguro de eliminar la factura ${factura.numeroFactura}?`)) {

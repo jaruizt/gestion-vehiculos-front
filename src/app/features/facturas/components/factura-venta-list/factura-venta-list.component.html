@@ -62,7 +62,7 @@
             <div>
               <strong>{{ factura.vehiculoMatricula }}</strong>
               <br>
-              <small class="text-muted">{{ factura.vehiculoMarcaModelo }}</small>
+              <!-- <small class="text-muted">{{ factura.vehiculoMarcaModelo }}</small> -->
             </div>
           </td>
           <td>
@@ -127,6 +127,126 @@
       <i class="bi bi-plus-circle"></i>
       Crear Factura
     </button>
+  </div>
+</div>
+
+<!-- Modal Detalle -->
+<div 
+  *ngIf="mostrarModalDetalle && facturaSeleccionada" 
+  class="modal-overlay"
+  (click)="cerrarModalDetalle()">
+  <div class="modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-receipt"></i>
+          Detalle de Factura de Venta
+        </h5>
+        <button 
+          type="button" 
+          class="btn-close" 
+          (click)="cerrarModalDetalle()"
+          aria-label="Close">
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <!-- Número de Factura -->
+        <div class="alert alert-primary">
+          <h4 class="mb-0">
+            <i class="bi bi-hash"></i>
+            {{ facturaSeleccionada.numeroFactura }}
+          </h4>
+        </div>
+
+        <div class="row">
+          <!-- Columna Izquierda -->
+          <div class="col-md-6">
+            <div class="detail-group">
+              <label><i class="bi bi-calendar"></i> Fecha de Factura</label>
+              <p>{{ facturaSeleccionada.fechaFactura | date:'dd/MM/yyyy' }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-person"></i> Cliente</label>
+              <p>
+                {{ facturaSeleccionada.clienteNombre }}<br>
+                <small class="text-muted">{{ facturaSeleccionada.clienteDni }}</small>
+              </p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-car-front"></i> Vehículo</label>
+              <p>{{ facturaSeleccionada.vehiculoMatricula }}</p>
+            </div>
+          </div>
+
+          <!-- Columna Derecha -->
+          <div class="col-md-6">
+            <div class="detail-group">
+              <label><i class="bi bi-currency-euro"></i> Base Imponible</label>
+              <p>{{ facturaSeleccionada.importeBase | currency:'EUR' }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-percent"></i> IVA</label>
+              <p>{{ facturaSeleccionada.iva }}%</p>
+            </div>
+
+            <div class="detail-group" *ngIf="facturaSeleccionada.descuento && facturaSeleccionada.descuento > 0">
+              <label><i class="bi bi-tag"></i> Descuento</label>
+              <p class="text-danger">- {{ facturaSeleccionada.descuento | currency:'EUR' }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label><i class="bi bi-cash-stack"></i> <strong>TOTAL</strong></label>
+              <p class="text-success fw-bold fs-4">{{ facturaSeleccionada.importeTotal | currency:'EUR' }}</p>
+            </div>
+          </div>
+
+          <!-- Beneficio (ancho completo) -->
+          <div class="col-12" *ngIf="facturaSeleccionada.beneficio !== undefined && facturaSeleccionada.beneficio !== null">
+            <hr>
+            <div class="detail-group">
+              <label>
+                <i class="bi bi-graph-up-arrow"></i> 
+                Beneficio de la Operación
+              </label>
+              <p [class.text-success]="facturaSeleccionada.beneficio > 0"
+                 [class.text-danger]="facturaSeleccionada.beneficio < 0"
+                 class="fw-bold fs-4">
+                {{ facturaSeleccionada.beneficio | currency:'EUR' }}
+                <small class="text-muted">
+                  ({{ calcularPorcentajeBeneficio(facturaSeleccionada) }}%)
+                </small>
+              </p>
+            </div>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="col-12" *ngIf="facturaSeleccionada.observaciones">
+            <hr>
+            <div class="detail-group">
+              <label><i class="bi bi-card-text"></i> Observaciones</label>
+              <p>{{ facturaSeleccionada.observaciones }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="cerrarModalDetalle()">
+          <i class="bi bi-x-circle"></i>
+          Cerrar
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
